@@ -6,13 +6,27 @@ var https = require('https'),
     isUndefined = require('lodash/isUndefined');
 
 
+
+var apiUrl = 'https://api.pinterest.com/oauth/?',
+    profileOptions = {
+        host: 'api.pinterest.com',
+        port: 443,
+        method: 'POST'
+    },
+    
+    usrOptions = {};
+
 module.exports = function (options) {
+    var module = {};
     if (!isObjectLike(options)) {
         throw new Error('Please pass the options.');
     }
 
-     
 
+    /**
+     * function to validate required options
+     * @param {*} optionName 
+     */
     function validateOptions(optionName) {
         if (isUndefined(options[optionName])) {
             throw new Error('Please pass required option - ' + optionName);
@@ -23,8 +37,6 @@ module.exports = function (options) {
     validateOptions('client_secret');
     validateOptions('state');
 
-
-    var apiUrl = 'https://api.pinterest.com/oauth/?';
     var redirectionOptions = {
         redirect_uri: options.redirect_uri,
         client_id: options.client_id,
@@ -32,28 +44,27 @@ module.exports = function (options) {
         scope: options.scope || 'read_public,read_relationships',
         state: options.state || 'someRandomBytes',
         response_type: 'code'
-    };
-
-    var profileOptions = {
-        host: 'api.pinterest.com',
-        port: 443,
-        method: 'POST'
-    }
-    var usrOptions = {};
-    var module = {};
+    };    
     var endUrl = {
         grant_type: 'authorization_code',
         client_id: options.client_id,
         client_secret: options.client_secret,
     }
 
-
-
+    /**
+     * function to redirect user to pinterest login screen
+     * @param {*} req request argument from express
+     * @param {*} res response from express
+     */
     module.authorization = function (req, res) {
         res.redirect(apiUrl + querystring.stringify(redirectionOptions));
     };
 
-
+    /**
+     *  function to get profile data and access-token from pinterest
+     * @param {*} req req request argument from express to get params
+     * @param {*} done callback after function is executed
+     */
     module.profile = function (req, done) {
         usrOptions['qs'] = {
             fields: options.fields || "id,first_name,last_name,image,url"
@@ -95,7 +106,11 @@ module.exports = function (options) {
 }
 
 
-
+/**
+ * function to make custom https requests
+ * @param {*} option requests parameters 
+ * @param {*} done callback after api response
+ */
 function requestUrl(option, done) {
     var fulldata = "";
     var req = https.request(option, function (res) {
