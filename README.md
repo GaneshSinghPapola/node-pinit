@@ -1,11 +1,11 @@
-# pin-login
+# node-pinit
 This module is used to authenticate a pinterest account and simply fetch user's details and an access-token from pinterest account.
 Before using this module you must register an app in your [Pinterest](https://developers.pinterest.com/apps/) developer account.
 
 
 ## Installation
 
-`npm i --save pin-login`
+`npm i --save node-pinit`
 
 
 ## Usage
