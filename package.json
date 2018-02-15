@@ -13,6 +13,10 @@
   ],
   "author": "Ganesh Singh",
   "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/GaneshSinghPapola/node-pinit/issues"
+  },
+  "homepage": "https://github.com/GaneshSinghPapola/node-pinit#readme",
   "dependencies": {
     "https": "^1.0.0",
     "lodash": "^4.17.5",
